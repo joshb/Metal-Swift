@@ -1,0 +1,5 @@
+*.swp
+.DS_Store
+project.xcworkspace
+xcuserdata
+Metal-Swift.app
