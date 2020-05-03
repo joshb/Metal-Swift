@@ -52,11 +52,7 @@
 		0D1CD0C1245E1A3300E23949 = {
 			isa = PBXGroup;
 			children = (
-				0D1CD0F2245E1DB000E23949 /* Assets */,
-				0D1CD0E2245E1CCD00E23949 /* Math */,
-				0D1CD0ED245E1D7800E23949 /* Mesh */,
-				0DD28BCA245F3E7500A606C8 /* Scene */,
-				0D1CD0DC245E1C6200E23949 /* Shaders */,
+				0DD28BCD245F563A00A606C8 /* Common */,
 				0D1CD0CC245E1A3300E23949 /* macOS */,
 				0D1CD0CB245E1A3300E23949 /* Products */,
 			);
@@ -82,48 +78,20 @@
 			path = macOS;
 			sourceTree = "<group>";
 		};
-		0D1CD0DC245E1C6200E23949 /* Shaders */ = {
+		0DD28BCD245F563A00A606C8 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				0D1CD0DE245E1C8600E23949 /* ShaderTypes.h */,
+				0D1CD0EF245E1D8500E23949 /* Cylinder.swift */,
+				0D1CD0E4245E1CCD00E23949 /* Matrix4.swift */,
+				0D1CD0EE245E1D8500E23949 /* Mesh.swift */,
+				0DD28BCB245F3E9900A606C8 /* Scene.swift */,
 				0D1CD0DD245E1C8600E23949 /* Shaders.metal */,
-			);
-			path = Shaders;
-			sourceTree = "<group>";
-		};
-		0D1CD0E2245E1CCD00E23949 /* Math */ = {
-			isa = PBXGroup;
-			children = (
+				0D1CD0DE245E1C8600E23949 /* ShaderTypes.h */,
+				0D1CD0F3245E1DC000E23949 /* Textures.xcassets */,
 				0D1CD0E3245E1CCD00E23949 /* Vector2.swift */,
 				0D1CD0E5245E1CCD00E23949 /* Vector3.swift */,
-				0D1CD0E4245E1CCD00E23949 /* Matrix4.swift */,
 			);
-			path = Math;
-			sourceTree = "<group>";
-		};
-		0D1CD0ED245E1D7800E23949 /* Mesh */ = {
-			isa = PBXGroup;
-			children = (
-				0D1CD0EE245E1D8500E23949 /* Mesh.swift */,
-				0D1CD0EF245E1D8500E23949 /* Cylinder.swift */,
-			);
-			path = Mesh;
-			sourceTree = "<group>";
-		};
-		0D1CD0F2245E1DB000E23949 /* Assets */ = {
-			isa = PBXGroup;
-			children = (
-				0D1CD0F3245E1DC000E23949 /* Textures.xcassets */,
-			);
-			path = Assets;
-			sourceTree = "<group>";
-		};
-		0DD28BCA245F3E7500A606C8 /* Scene */ = {
-			isa = PBXGroup;
-			children = (
-				0DD28BCB245F3E9900A606C8 /* Scene.swift */,
-			);
-			path = Scene;
+			path = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,7 +317,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.joshbeam.Metal-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = Shaders/ShaderTypes.h;
+				SWIFT_OBJC_BRIDGING_HEADER = Common/ShaderTypes.h;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -368,7 +336,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.joshbeam.Metal-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = Shaders/ShaderTypes.h;
+				SWIFT_OBJC_BRIDGING_HEADER = Common/ShaderTypes.h;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
