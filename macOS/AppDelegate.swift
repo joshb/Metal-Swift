@@ -57,6 +57,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, MTKViewDelegate {
             return
         }
 
+		guard let library = device.makeDefaultLibrary() else {
+			print("Default library not found")
+			return
+		}
+
 		view.device = device
 		view.delegate = self
 		view.depthStencilPixelFormat = .depth32Float
@@ -71,21 +76,30 @@ class AppDelegate: NSObject, NSApplicationDelegate, MTKViewDelegate {
 		mesh = Cylinder(divisions: 30)
 		vertexBuffer = mesh.makeBuffer(device: device)
 
-		let library = device.makeDefaultLibrary()!
 		let descriptor = MTLRenderPipelineDescriptor()
 		descriptor.vertexFunction = library.makeFunction(name: "vertexShader")
 		descriptor.fragmentFunction = library.makeFunction(name: "fragmentShader")
 		descriptor.vertexDescriptor = mesh.vertexDescriptor
 		descriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
 		descriptor.depthAttachmentPixelFormat = view.depthStencilPixelFormat
-		pipelineState = try? device.makeRenderPipelineState(descriptor: descriptor)
+		do {
+			pipelineState = try device.makeRenderPipelineState(descriptor: descriptor)
+		} catch {
+			print("Could not make render pipeline state")
+			return
+		}
 
 		textureLoader = MTKTextureLoader(device: device)
 		let textureOptions = [
             MTKTextureLoader.Option.textureUsage: NSNumber(value: MTLTextureUsage.shaderRead.rawValue),
             MTKTextureLoader.Option.textureStorageMode: NSNumber(value: MTLStorageMode.`private`.rawValue)
         ]
-		normalmapTexture = try? textureLoader.newTexture(name: "normalmap", scaleFactor: 1.0, bundle: nil, options: textureOptions)
+		do {
+			normalmapTexture = try textureLoader.newTexture(name: "normalmap", scaleFactor: 1.0, bundle: nil, options: textureOptions)
+		} catch {
+			print("Could not load normalmap texture")
+			return
+		}
 	}
 
 	func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
