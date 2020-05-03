@@ -27,36 +27,36 @@ import Foundation
 
 /// Represents a 3D vector.
 struct Vector3 {
-	var x: Float = 0.0
-	var y: Float = 0.0
-	var z: Float = 0.0
+    var x: Float = 0.0
+    var y: Float = 0.0
+    var z: Float = 0.0
 
-	var simd: vector_float3 {
-		return vector_float3(x, y, z)
-	}
+    var simd: vector_float3 {
+        return vector_float3(x, y, z)
+    }
 
-	var length: Float {
-		return sqrtf(x*x + y*y + z*z)
-	}
+    var length: Float {
+        return sqrtf(x*x + y*y + z*z)
+    }
 
-	var normalized: Vector3 {
-		let len = length
-		return Vector3(x: x / len, y: y / len, z: z / len)
-	}
+    var normalized: Vector3 {
+        let len = length
+        return Vector3(x: x / len, y: y / len, z: z / len)
+    }
 }
 
 func + (left: Vector3, right: Vector3) -> Vector3 {
-	return Vector3(x: left.x + right.x, y: left.y + right.y, z: left.z + right.z)
+    return Vector3(x: left.x + right.x, y: left.y + right.y, z: left.z + right.z)
 }
 
 func - (left: Vector3, right: Vector3) -> Vector3 {
-	return Vector3(x: left.x - right.x, y: left.y - right.y, z: left.z - right.z)
+    return Vector3(x: left.x - right.x, y: left.y - right.y, z: left.z - right.z)
 }
 
 func * (left: Vector3, right: Vector3) -> Vector3 {
-	return Vector3(x: left.x * right.x, y: left.y * right.y, z: left.z * right.z)
+    return Vector3(x: left.x * right.x, y: left.y * right.y, z: left.z * right.z)
 }
 
 func * (left: Vector3, right: Float) -> Vector3 {
-	return Vector3(x: left.x * right, y: left.y * right, z: left.z * right)
+    return Vector3(x: left.x * right, y: left.y * right, z: left.z * right)
 }

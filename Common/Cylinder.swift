@@ -27,46 +27,46 @@ import Foundation
 import Metal
 
 class Cylinder: Mesh {
-	final var divisions: Int
-	private var _vertices: [MeshVertex]?
+    final var divisions: Int
+    private var _vertices: [MeshVertex]?
 
-	init(divisions: Int) {
-		self.divisions = divisions
-	}
+    init(divisions: Int) {
+        self.divisions = divisions
+    }
 
-	var primitiveType: MTLPrimitiveType {
-		return .triangleStrip
-	}
+    var primitiveType: MTLPrimitiveType {
+        return .triangleStrip
+    }
 
-	var vertices: [MeshVertex] {
-		if let vertices = _vertices {
-			return vertices
-		}
+    var vertices: [MeshVertex] {
+        if let vertices = _vertices {
+            return vertices
+        }
 
-		let divisionsf = Float(divisions)
-		var vertices = [MeshVertex]()
-		for i in 0...divisions {
-			let r1 = ((Float.pi * 2.0) / divisionsf) * Float(i)
-			let r2 = r1 + Float.pi / 2.0
+        let divisionsf = Float(divisions)
+        var vertices = [MeshVertex]()
+        for i in 0...divisions {
+            let r1 = ((Float.pi * 2.0) / divisionsf) * Float(i)
+            let r2 = r1 + Float.pi / 2.0
 
-			let c1 = cosf(r1)
-			let s1 = sinf(r1)
-			let c2 = cosf(r2)
-			let s2 = sinf(r2)
+            let c1 = cosf(r1)
+            let s1 = sinf(r1)
+            let c2 = cosf(r2)
+            let s2 = sinf(r2)
 
-			vertices.append(MeshVertex(position: Vector3(x: c1, y: 1.0, z: -s1),
-			                           tangent: Vector3(x: c2, y: 0.0, z: -s2),
-			                           bitangent: Vector3(x: 0.0, y: 1.0, z: 0.0),
-			                           normal: Vector3(x: c1, y: 0.0, z: -s1),
-									   texCoords: Vector2(x: 1.0 / divisionsf * Float(i) * 1.0, y: 0.0)))
-			vertices.append(MeshVertex(position: Vector3(x: c1, y: -1.0, z: -s1),
-			                           tangent: Vector3(x: c2, y: 0.0, z: -s2),
-			                           bitangent: Vector3(x: 0.0, y: 1.0, z: 0.0),
-			                           normal: Vector3(x: c1, y: 0.0, z: -s1),
-			                           texCoords: Vector2(x: 1.0 / divisionsf * Float(i) * 1.0, y: 1.0)))
-		}
+            vertices.append(MeshVertex(position: Vector3(x: c1, y: 1.0, z: -s1),
+                                       tangent: Vector3(x: c2, y: 0.0, z: -s2),
+                                       bitangent: Vector3(x: 0.0, y: 1.0, z: 0.0),
+                                       normal: Vector3(x: c1, y: 0.0, z: -s1),
+                                       texCoords: Vector2(x: 1.0 / divisionsf * Float(i) * 1.0, y: 0.0)))
+            vertices.append(MeshVertex(position: Vector3(x: c1, y: -1.0, z: -s1),
+                                       tangent: Vector3(x: c2, y: 0.0, z: -s2),
+                                       bitangent: Vector3(x: 0.0, y: 1.0, z: 0.0),
+                                       normal: Vector3(x: c1, y: 0.0, z: -s1),
+                                       texCoords: Vector2(x: 1.0 / divisionsf * Float(i) * 1.0, y: 1.0)))
+        }
 
-		_vertices = vertices
-		return vertices
-	}
+        _vertices = vertices
+        return vertices
+    }
 }

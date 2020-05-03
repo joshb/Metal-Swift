@@ -33,10 +33,10 @@
 typedef struct {
     matrix_float4x4 projectionMatrix;
     matrix_float4x4 modelviewMatrix;
-	vector_float3 cameraPosition;
+    vector_float3 cameraPosition;
 
-	vector_float3 lightPositions[NUM_LIGHTS];
-	vector_float3 lightColors[NUM_LIGHTS];
+    vector_float3 lightPositions[NUM_LIGHTS];
+    vector_float3 lightColors[NUM_LIGHTS];
 } Uniforms;
 
 #endif /* ShaderTypes_h */

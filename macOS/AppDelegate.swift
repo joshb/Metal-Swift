@@ -29,48 +29,48 @@ import MetalKit
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, MTKViewDelegate {
-	@IBOutlet weak var window: NSWindow!
-	private var scene: Scene?
+    @IBOutlet weak var window: NSWindow!
+    private var scene: Scene?
 
-	private var view: MTKView {
-		return window.contentView as! MTKView
-	}
+    private var view: MTKView {
+        return window.contentView as! MTKView
+    }
 
-	func applicationDidFinishLaunching(_ aNotification: Notification) {
-		guard let device = MTLCreateSystemDefaultDevice() else {
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        guard let device = MTLCreateSystemDefaultDevice() else {
             print("Metal is not supported on this device")
             return
         }
 
-		view.device = device
-		view.delegate = self
-		view.depthStencilPixelFormat = .depth32Float
-		view.clearDepth = 1.0
+        view.device = device
+        view.delegate = self
+        view.depthStencilPixelFormat = .depth32Float
+        view.clearDepth = 1.0
 
-		guard let scene = Scene(device: device, colorPixelFormat: view.colorPixelFormat, depthStencilPixelFormat: view.depthStencilPixelFormat) else {
-			print("Could not create scene")
-			return
-		}
+        guard let scene = Scene(device: device, colorPixelFormat: view.colorPixelFormat, depthStencilPixelFormat: view.depthStencilPixelFormat) else {
+            print("Could not create scene")
+            return
+        }
 
-		self.scene = scene
-		mtkView(view, drawableSizeWillChange: view.drawableSize)
-	}
+        self.scene = scene
+        mtkView(view, drawableSizeWillChange: view.drawableSize)
+    }
 
-	func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-		return true
-	}
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return true
+    }
 
-	func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-		if let scene = self.scene {
-			scene.drawingDimensions = Vector2(x: Float(size.width), y: Float(size.height))
-		}
-	}
+    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        if let scene = self.scene {
+            scene.drawingDimensions = Vector2(x: Float(size.width), y: Float(size.height))
+        }
+    }
 
-	func draw(in view: MTKView) {
-		if let scene = self.scene {
-			scene.cycle(secondsElapsed: 1.0 / Float(view.preferredFramesPerSecond))
-			scene.render(renderPassDescriptor: view.currentRenderPassDescriptor!, drawable: view.currentDrawable!)
-		}
-	}
+    func draw(in view: MTKView) {
+        if let scene = self.scene {
+            scene.cycle(secondsElapsed: 1.0 / Float(view.preferredFramesPerSecond))
+            scene.render(renderPassDescriptor: view.currentRenderPassDescriptor!, drawable: view.currentDrawable!)
+        }
+    }
 }
 

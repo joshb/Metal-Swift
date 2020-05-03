@@ -27,35 +27,35 @@ import Foundation
 
 /// Represents a 2D vector.
 struct Vector2 {
-	var x: Float = 0.0
-	var y: Float = 0.0
+    var x: Float = 0.0
+    var y: Float = 0.0
 
-	var simd: vector_float2 {
-		return vector_float2(x, y)
-	}
+    var simd: vector_float2 {
+        return vector_float2(x, y)
+    }
 
-	var length: Float {
-		return sqrtf(x*x + y*y)
-	}
+    var length: Float {
+        return sqrtf(x*x + y*y)
+    }
 
-	var normalized: Vector2 {
-		let len = length
-		return Vector2(x: x / len, y: y / len)
-	}
+    var normalized: Vector2 {
+        let len = length
+        return Vector2(x: x / len, y: y / len)
+    }
 }
 
 func + (left: Vector2, right: Vector2) -> Vector2 {
-	return Vector2(x: left.x + right.x, y: left.y + right.y)
+    return Vector2(x: left.x + right.x, y: left.y + right.y)
 }
 
 func - (left: Vector2, right: Vector2) -> Vector2 {
-	return Vector2(x: left.x - right.x, y: left.y - right.y)
+    return Vector2(x: left.x - right.x, y: left.y - right.y)
 }
 
 func * (left: Vector2, right: Vector2) -> Vector2 {
-	return Vector2(x: left.x * right.x, y: left.y * right.y)
+    return Vector2(x: left.x * right.x, y: left.y * right.y)
 }
 
 func * (left: Vector2, right: Float) -> Vector2 {
-	return Vector2(x: left.x * right, y: left.y * right)
+    return Vector2(x: left.x * right, y: left.y * right)
 }

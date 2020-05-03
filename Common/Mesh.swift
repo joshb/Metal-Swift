@@ -28,37 +28,37 @@ import Metal
 
 /// Represents a single vertex in a mesh.
 struct MeshVertex {
-	var position: Vector3
-	var tangent: Vector3
-	var bitangent: Vector3
-	var normal: Vector3
-	var texCoords: Vector2
+    var position: Vector3
+    var tangent: Vector3
+    var bitangent: Vector3
+    var normal: Vector3
+    var texCoords: Vector2
 }
 
 protocol Mesh {
-	var primitiveType: MTLPrimitiveType { get }
-	var vertices: [MeshVertex] { get }
+    var primitiveType: MTLPrimitiveType { get }
+    var vertices: [MeshVertex] { get }
 }
 
 extension Mesh {
-	func makeBuffer(device: MTLDevice) -> MTLBuffer? {
-		let v = vertices
-		return device.makeBuffer(bytes: v, length: MemoryLayout<MeshVertex>.size * v.count, options: [])
-	}
+    func makeBuffer(device: MTLDevice) -> MTLBuffer? {
+        let v = vertices
+        return device.makeBuffer(bytes: v, length: MemoryLayout<MeshVertex>.size * v.count, options: [])
+    }
 
-	var vertexDescriptor: MTLVertexDescriptor {
-		let descriptor = MTLVertexDescriptor()
-		for i in 0..<4 {
-			descriptor.attributes[i].format = MTLVertexFormat.float3
-			descriptor.attributes[i].offset = 12 * i
-			descriptor.attributes[i].bufferIndex = 0
-		}
-		descriptor.attributes[4].format = MTLVertexFormat.float2
-		descriptor.attributes[4].offset = 48
-		descriptor.attributes[4].bufferIndex = 0
-		descriptor.layouts[0].stride = MemoryLayout<MeshVertex>.size
-		descriptor.layouts[0].stepRate = 1
-		descriptor.layouts[0].stepFunction = MTLVertexStepFunction.perVertex
-		return descriptor
-	}
+    var vertexDescriptor: MTLVertexDescriptor {
+        let descriptor = MTLVertexDescriptor()
+        for i in 0..<4 {
+            descriptor.attributes[i].format = MTLVertexFormat.float3
+            descriptor.attributes[i].offset = 12 * i
+            descriptor.attributes[i].bufferIndex = 0
+        }
+        descriptor.attributes[4].format = MTLVertexFormat.float2
+        descriptor.attributes[4].offset = 48
+        descriptor.attributes[4].bufferIndex = 0
+        descriptor.layouts[0].stride = MemoryLayout<MeshVertex>.size
+        descriptor.layouts[0].stepRate = 1
+        descriptor.layouts[0].stepFunction = MTLVertexStepFunction.perVertex
+        return descriptor
+    }
 }
