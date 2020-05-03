@@ -30,7 +30,7 @@ import MetalKit
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, MTKViewDelegate {
 	@IBOutlet weak var window: NSWindow!
-	private var scene: Scene!
+	private var scene: Scene?
 
 	private var view: MTKView {
 		return window.contentView as! MTKView
@@ -61,12 +61,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, MTKViewDelegate {
 	}
 
 	func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-		scene.drawingDimensions = Vector2(x: Float(size.width), y: Float(size.height))
+		if let scene = self.scene {
+			scene.drawingDimensions = Vector2(x: Float(size.width), y: Float(size.height))
+		}
 	}
 
 	func draw(in view: MTKView) {
-		scene.cycle(secondsElapsed: 1.0 / Float(view.preferredFramesPerSecond))
-		scene.render(renderPassDescriptor: view.currentRenderPassDescriptor!, drawable: view.currentDrawable!)
+		if let scene = self.scene {
+			scene.cycle(secondsElapsed: 1.0 / Float(view.preferredFramesPerSecond))
+			scene.render(renderPassDescriptor: view.currentRenderPassDescriptor!, drawable: view.currentDrawable!)
+		}
 	}
 }
 
