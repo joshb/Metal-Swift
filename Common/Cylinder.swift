@@ -44,15 +44,15 @@ class Cylinder: Mesh {
 		}
 
 		let divisionsf = Float(divisions)
-        var vertices = [MeshVertex]()
-        for i in 0...divisions {
-            let r1 = ((Float.pi * 2.0) / divisionsf) * Float(i)
-            let r2 = r1 + Float.pi / 2.0
+		var vertices = [MeshVertex]()
+		for i in 0...divisions {
+			let r1 = ((Float.pi * 2.0) / divisionsf) * Float(i)
+			let r2 = r1 + Float.pi / 2.0
 
-            let c1 = cosf(r1)
-            let s1 = sinf(r1)
-            let c2 = cosf(r2)
-            let s2 = sinf(r2)
+			let c1 = cosf(r1)
+			let s1 = sinf(r1)
+			let c2 = cosf(r2)
+			let s2 = sinf(r2)
 
 			vertices.append(MeshVertex(position: Vector3(x: c1, y: 1.0, z: -s1),
 			                           tangent: Vector3(x: c2, y: 0.0, z: -s2),
@@ -64,7 +64,7 @@ class Cylinder: Mesh {
 			                           bitangent: Vector3(x: 0.0, y: 1.0, z: 0.0),
 			                           normal: Vector3(x: c1, y: 0.0, z: -s1),
 			                           texCoords: Vector2(x: 1.0 / divisionsf * Float(i) * 1.0, y: 1.0)))
-        }
+		}
 
 		_vertices = vertices
 		return vertices

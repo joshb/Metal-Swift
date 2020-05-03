@@ -67,9 +67,9 @@ class Scene {
 
 		textureLoader = MTKTextureLoader(device: device)
 		let textureOptions = [
-            MTKTextureLoader.Option.textureUsage: NSNumber(value: MTLTextureUsage.shaderRead.rawValue),
-            MTKTextureLoader.Option.textureStorageMode: NSNumber(value: MTLStorageMode.`private`.rawValue)
-        ]
+			MTKTextureLoader.Option.textureUsage: NSNumber(value: MTLTextureUsage.shaderRead.rawValue),
+			MTKTextureLoader.Option.textureStorageMode: NSNumber(value: MTLStorageMode.`private`.rawValue)
+		]
 		do {
 			normalmapTexture = try textureLoader.newTexture(name: "normalmap", scaleFactor: 1.0, bundle: nil, options: textureOptions)
 		} catch {
@@ -143,10 +143,10 @@ class Scene {
 		lightRotation += (Float.pi / 4.0) * secondsElapsed
 		var lightPositions = [Vector3]()
 		for i in 0..<NUM_LIGHTS {
-            let radius: Float = 1.75
-            let r = (((Float.pi * 2.0) / Float(NUM_LIGHTS)) * Float(i)) + lightRotation
+			let radius: Float = 1.75
+			let r = (((Float.pi * 2.0) / Float(NUM_LIGHTS)) * Float(i)) + lightRotation
 			lightPositions.append(Vector3(x: cosf(r) * radius, y: cosf(r) * sinf(r), z: sinf(r) * radius))
-        }
+		}
 		uniforms[0].lightPositions = (lightPositions[0].simd, lightPositions[1].simd, lightPositions[2].simd)
 	}
 }
