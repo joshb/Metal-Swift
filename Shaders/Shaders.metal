@@ -39,7 +39,11 @@ typedef struct {
 typedef struct {
 	float4 position [[position]];
 	float2 texCoords;
+
+	// Vector from the fragment's position to the camera's position.
 	float3 cameraVector;
+
+	// Vectors from the fragment's position to each light's position.
 	float3 lightVector1, lightVector2, lightVector3;
 } Fragment;
 
@@ -66,20 +70,21 @@ Lighting calculateLighting(float3 normal, float3 cameraDir, float3 lightVector, 
 	const float maxDistSquared = maxDist * maxDist;
 	Lighting out;
 
-	// calculate distance between 0.0 and 1.0
+	// Calculate lightFactor, which is a value from 0.0 to 1.0 indicating
+	// how much the light should affect the lighting of the fragment.
 	float dist = min(dot(lightVector, lightVector), maxDistSquared) / maxDistSquared;
-	float distFactor = 1.0 - dist;
+	float lightFactor = 1.0 - dist;
 
-	// diffuse
+	// Calculate diffuse lighting.
 	float3 lightDir = normalize(lightVector);
 	float diffuseDot = dot(normal, lightDir);
-	out.diffuse = lightColor * clamp(diffuseDot, 0.0, 1.0) * distFactor;
+	out.diffuse = lightColor * clamp(diffuseDot, 0.0, 1.0) * lightFactor;
 
-	// specular
+	// Calculate specular lighting.
 	float3 halfAngle = normalize(cameraDir + lightDir);
 	float3 specularColor = min(lightColor + 0.5, 1.0);
 	float specularDot = dot(normal, halfAngle);
-	out.specular = specularColor * pow(clamp(specularDot, 0.0, 1.0), 16.0) * distFactor;
+	out.specular = specularColor * pow(clamp(specularDot, 0.0, 1.0), 16.0) * lightFactor;
 
 	return out;
 }
@@ -94,7 +99,7 @@ Lighting addLighting(Lighting l1, Lighting l2) {
 fragment float4 fragmentShader(Fragment in [[stage_in]], texture2d<float> normalmap [[texture(0)]], constant Uniforms &uniforms [[buffer(1)]]) {
 	constexpr sampler colorSampler(mip_filter::linear, mag_filter::linear, min_filter::linear);
 
-	// get the fragment normal and camera direction
+	// Get the fragment normal and camera direction.
 	float3 fragmentNormal = normalmap.sample(colorSampler, in.texCoords).xyz;
 	float3 normal = normalize(fragmentNormal);
 	float3 cameraDir = normalize(in.cameraVector);

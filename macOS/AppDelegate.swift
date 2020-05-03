@@ -36,7 +36,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, MTKViewDelegate {
 
 	private final var mesh: Mesh!
 	private final var vertexBuffer: MTLBuffer!
-	private final var texture: MTLTexture!
+
+	private final var textureLoader: MTKTextureLoader!
+	private final var normalmapTexture: MTLTexture!
 
 	private final var uniforms: UnsafeMutablePointer<Uniforms>!
 	private final var uniformBuffer: MTLBuffer!
@@ -45,23 +47,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, MTKViewDelegate {
 		return window.contentView as! MTKView
 	}
 
+	private var device: MTLDevice {
+		return view.device!
+	}
+
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		guard let device = MTLCreateSystemDefaultDevice() else {
             print("Metal is not supported on this device")
             return
         }
 
+		view.device = device
+		view.delegate = self
 		view.depthStencilPixelFormat = .depth32Float
 		view.clearDepth = 1.0
 
-		view.device = device
-		mtkView(view, drawableSizeWillChange: view.drawableSize)
-		view.delegate = self
-
-		commandQueue = device.makeCommandQueue()
+		// Create the uniforms buffer and call mtkView to update the projection matrix uniform.
 		uniformBuffer = device.makeBuffer(length: (MemoryLayout<Uniforms>.size + 0xFF) & -0x100, options: [])
 		uniforms = UnsafeMutableRawPointer(uniformBuffer.contents()).bindMemory(to:Uniforms.self, capacity:1)
+		mtkView(view, drawableSizeWillChange: view.drawableSize)
 
+		commandQueue = device.makeCommandQueue()
 		mesh = Cylinder(divisions: 30)
 		vertexBuffer = mesh.makeBuffer(device: device)
 
@@ -74,25 +80,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, MTKViewDelegate {
 		descriptor.depthAttachmentPixelFormat = view.depthStencilPixelFormat
 		pipelineState = try? device.makeRenderPipelineState(descriptor: descriptor)
 
-		texture = try? AppDelegate.loadTexture(device: device, textureName: "normalmap")
-	}
-
-	class func loadTexture(device: MTLDevice, textureName: String) throws -> MTLTexture {
-        let loader = MTKTextureLoader(device: device)
-        let options = [
+		textureLoader = MTKTextureLoader(device: device)
+		let textureOptions = [
             MTKTextureLoader.Option.textureUsage: NSNumber(value: MTLTextureUsage.shaderRead.rawValue),
             MTKTextureLoader.Option.textureStorageMode: NSNumber(value: MTLStorageMode.`private`.rawValue)
         ]
-        return try loader.newTexture(name: textureName, scaleFactor: 1.0, bundle: nil, options: options)
-    }
+		normalmapTexture = try? textureLoader.newTexture(name: "normalmap", scaleFactor: 1.0, bundle: nil, options: textureOptions)
+	}
 
 	func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
 		return true
 	}
 
-	private var aspectRatio: Float = 1.0
 	func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-		aspectRatio = Float(size.width / size.height)
+		// Update the projection matrix when the view's size changes.
+		let aspectRatio = Float(size.width / size.height)
+		uniforms[0].projectionMatrix = perspectiveMatrix(fov: Float.pi / 2.0, aspect: aspectRatio, near: 0.1, far: 200.0)
 	}
 
 	private var cameraRotation: Float = 0.0
@@ -101,15 +104,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, MTKViewDelegate {
 	func draw(in view: MTKView) {
 		let secondsElapsed = 1.0 / Float(view.preferredFramesPerSecond)
 
+		// Update the camera position.
 		cameraRotation -= (Float.pi / 16.0) * secondsElapsed
-		cameraPosition = Vector3(x: sinf(cameraRotation) * 3.0, y: 0.0, z: cosf(cameraRotation) * 3.0)
+		cameraPosition = Vector3(x: sinf(cameraRotation), y: 0.0, z: cosf(cameraRotation)) * 2.5
 		uniforms[0].cameraPosition = cameraPosition.simd
 
-		uniforms[0].projectionMatrix = perspectiveMatrix(fov: Float.pi / 2.0, aspect: aspectRatio, near: 0.1, far: 200.0)
+		// Update the modelview matrix.
 		let r = rotationMatrix(angle: cameraRotation, x: 0.0, y: -1.0, z: 0.0)
 		let t = translationMatrix(x: -cameraPosition.x, y: -cameraPosition.y, z: -cameraPosition.z)
-		uniforms[0].modelviewMatrix = (r * t)
+		uniforms[0].modelviewMatrix = r * t
 
+		// Update the light positions.
 		lightRotation += (Float.pi / 4.0) * secondsElapsed
 		var lightPositions = [Vector3]()
 		for i in 0..<NUM_LIGHTS {
@@ -122,17 +127,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, MTKViewDelegate {
 
 		if let commandBuffer = commandQueue.makeCommandBuffer() {
 			if let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: view.currentRenderPassDescriptor!) {
+				// Enable depth testing.
 				let descriptor = MTLDepthStencilDescriptor()
 				descriptor.isDepthWriteEnabled = true
 				descriptor.depthCompareFunction = .lessEqual
-				let state = view.device?.makeDepthStencilState(descriptor: descriptor)
+				let state = device.makeDepthStencilState(descriptor: descriptor)
 				encoder.setDepthStencilState(state)
 
+				// Render the cylinder mesh.
 				encoder.setRenderPipelineState(pipelineState)
 				encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
 				encoder.setVertexBuffer(uniformBuffer, offset: 0, index: 1)
 				encoder.setFragmentBuffer(uniformBuffer, offset: 0, index: 1)
-				encoder.setFragmentTexture(texture, index: 0)
+				encoder.setFragmentTexture(normalmapTexture, index: 0)
 				encoder.drawPrimitives(type: mesh.primitiveType, vertexStart: 0, vertexCount: mesh.vertices.count)
 				encoder.endEncoding()
 			}

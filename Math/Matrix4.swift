@@ -28,6 +28,7 @@ import Foundation
 /// Represents a 4x4 matrix.
 typealias Matrix4 = matrix_float4x4
 
+/// Returns a new perspective projection matrix.
 func perspectiveMatrix(fov: Float, aspect: Float, near: Float, far: Float) -> Matrix4 {
 	let f = 1.0 / tanf(fov / 2.0)
 	return Matrix4(columns: (
@@ -38,6 +39,7 @@ func perspectiveMatrix(fov: Float, aspect: Float, near: Float, far: Float) -> Ma
 	))
 }
 
+/// Returns a new translation matrix.
 func translationMatrix(x: Float, y: Float, z: Float) -> Matrix4 {
 	return Matrix4(columns: (
 		SIMD4<Float>(1.0, 0.0, 0.0, 0.0),
@@ -47,6 +49,7 @@ func translationMatrix(x: Float, y: Float, z: Float) -> Matrix4 {
 	))
 }
 
+/// Returns a new rotation matrix.
 func rotationMatrix(angle: Float, x: Float, y: Float, z: Float) -> Matrix4 {
 	let c = cosf(angle)
 	let ci = 1.0 - c
