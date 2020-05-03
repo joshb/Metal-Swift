@@ -17,6 +17,7 @@
 		0D1CD0F0245E1D8500E23949 /* Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1CD0EE245E1D8500E23949 /* Mesh.swift */; };
 		0D1CD0F1245E1D8500E23949 /* Cylinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1CD0EF245E1D8500E23949 /* Cylinder.swift */; };
 		0D1CD0F4245E1DC000E23949 /* Textures.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D1CD0F3245E1DC000E23949 /* Textures.xcassets */; };
+		0DD28BCC245F3E9900A606C8 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD28BCB245F3E9900A606C8 /* Scene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		0D1CD0EE245E1D8500E23949 /* Mesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mesh.swift; sourceTree = "<group>"; };
 		0D1CD0EF245E1D8500E23949 /* Cylinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cylinder.swift; sourceTree = "<group>"; };
 		0D1CD0F3245E1DC000E23949 /* Textures.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Textures.xcassets; sourceTree = "<group>"; };
+		0DD28BCB245F3E9900A606C8 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,9 +53,10 @@
 			isa = PBXGroup;
 			children = (
 				0D1CD0F2245E1DB000E23949 /* Assets */,
-				0D1CD0DC245E1C6200E23949 /* Shaders */,
 				0D1CD0E2245E1CCD00E23949 /* Math */,
 				0D1CD0ED245E1D7800E23949 /* Mesh */,
+				0DD28BCA245F3E7500A606C8 /* Scene */,
+				0D1CD0DC245E1C6200E23949 /* Shaders */,
 				0D1CD0CC245E1A3300E23949 /* macOS */,
 				0D1CD0CB245E1A3300E23949 /* Products */,
 			);
@@ -113,6 +116,14 @@
 				0D1CD0F3245E1DC000E23949 /* Textures.xcassets */,
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		0DD28BCA245F3E7500A606C8 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				0DD28BCB245F3E9900A606C8 /* Scene.swift */,
+			);
+			path = Scene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -190,6 +201,7 @@
 				0D1CD0F0245E1D8500E23949 /* Mesh.swift in Sources */,
 				0D1CD0DF245E1C8600E23949 /* Shaders.metal in Sources */,
 				0D1CD0CE245E1A3300E23949 /* AppDelegate.swift in Sources */,
+				0DD28BCC245F3E9900A606C8 /* Scene.swift in Sources */,
 				0D1CD0E9245E1CCD00E23949 /* Vector2.swift in Sources */,
 				0D1CD0EA245E1CCD00E23949 /* Matrix4.swift in Sources */,
 				0D1CD0EB245E1CCD00E23949 /* Vector3.swift in Sources */,

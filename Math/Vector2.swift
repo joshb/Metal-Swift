@@ -56,6 +56,6 @@ func * (left: Vector2, right: Vector2) -> Vector2 {
 	return Vector2(x: left.x * right.x, y: left.y * right.y)
 }
 
-func + (left: Vector2, right: Float) -> Vector2 {
+func * (left: Vector2, right: Float) -> Vector2 {
 	return Vector2(x: left.x * right, y: left.y * right)
 }
